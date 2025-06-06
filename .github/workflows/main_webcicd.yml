@@ -1,6 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
-# GPT fix
+# Another atempt with Chatgpt
+
 
 name: Build and deploy ASP.Net Core app to Azure Web App - webcicd
 
@@ -24,11 +25,14 @@ jobs:
         with:
           dotnet-version: '8.x'
 
+      - name: 🔍 Debug - List all project files
+        run: Get-ChildItem -Recurse -Filter *.csproj
+
       - name: Build with dotnet
-        run: dotnet build AZ_CICD.csproj --configuration Release
+        run: dotnet build src/YourProject/YourProject.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish AZ_CICD.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish src/YourProject/YourProject.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -42,13 +46,13 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
-      
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
