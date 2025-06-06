@@ -56,5 +56,5 @@ jobs:
         uses: Azure/static-web-apps-deploy@v1
         with:
           action: "close"
-Add placeholder build script to package.json · jwstout-wtamu/az_cicd@3349856
+
 #end
