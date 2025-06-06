@@ -1,0 +1,21 @@
+{
+  "name": "az_cicd",
+  "version": "1.0.0",
+  "description": "---\r ## This repo will be for the final project\r #### This readme is for markup only at this time.\r # Project Tech Specs\r The guidance on prototype development creates a Baseline, Good, Better, Best approach for Django feature targeting that will provide the best chance for you to realize a rich prototype.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo Placeholder build script"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwstout-wtamu/az_cicd.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jwstout-wtamu/az_cicd/issues"
+  },
+  "homepage": "https://github.com/jwstout-wtamu/az_cicd#readme"
+}
