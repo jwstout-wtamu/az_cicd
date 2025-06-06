@@ -29,7 +29,8 @@ jobs:
       - name: Build And Deploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          #azure_static_web_apps_api_token: #${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN}}
           action: "upload"
           app_location: "/" # Root or "/workflow" if Django app is in subdirectory
           output_location: "staticfiles" # Adjust to your STATIC_ROOT
@@ -46,3 +47,5 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "close"
+
+          
