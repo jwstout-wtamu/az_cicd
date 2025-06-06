@@ -1,4 +1,4 @@
-# Filler for now - Justin Stout Blog app
+# Filler for now - Justin Stout Blog app- after node.js install
 ---
 ## This repo will be for the final project
 #### This readme is for markup only at this time.
