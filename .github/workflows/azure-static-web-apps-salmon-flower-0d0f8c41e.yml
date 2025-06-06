@@ -19,18 +19,35 @@ jobs:
         with:
           submodules: true
           lfs: false
-      
+
+      # Optional: Add Node.js setup if you need to install dependencies or run a build
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'  # Adjust to your project's Node.js version
+
+      # Optional: Install dependencies if needed
+      - name: Install dependencies
+        run: npm install
+        if: steps.builddeploy.outputs.skip_app_build != 'true'
+
+      # Optional: Build the app if skip_app_build is false
+      - name: Build app
+        run: npm run build  # Adjust to your build command (e.g., yarn build, npm run generate)
+        if: steps.builddeploy.outputs.skip_app_build != 'true'
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_XXXXXXXX }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "/"
-          output_location: "/"
-          skip_app_build: true
-          skip_api_build: true
+          app_location: "/"  # Root directory of your app source code
+          output_location: "/"  # Directory where build output is located (e.g., 'build' or 'dist' if built)
+          skip_app_build: true  # Set to false if you want Azure to handle the build
+          skip_api_build: true  # Set to false if you have an API to build
+          skip_deploy_on_missing_secrets: false  # Set to true to skip deployment if token is missing
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -41,5 +58,5 @@ jobs:
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_XXXXXXXX }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "close"
