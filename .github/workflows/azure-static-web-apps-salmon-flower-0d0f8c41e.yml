@@ -14,40 +14,37 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+    permissions:
+       id-token: write
+       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
-
-      # Optional: Add Node.js setup if you need to install dependencies or run a build
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Install OIDC Client from Core Package
+        run: npm install @actions/core@1.6.0 @actions/http-client
+      - name: Get Id Token
+        uses: actions/github-script@v6
+        id: idtoken
         with:
-          node-version: '16'  # Adjust to your project's Node.js version
-
-      # Optional: Install dependencies if needed
-      - name: Install dependencies
-        run: npm install
-        if: steps.builddeploy.outputs.skip_app_build != 'true'
-
-      # Optional: Build the app if skip_app_build is false
-      - name: Build app
-        run: npm run build  # Adjust to your build command (e.g., yarn build, npm run generate)
-        if: steps.builddeploy.outputs.skip_app_build != 'true'
-
+           script: |
+               const coredemo = require('@actions/core')
+               return await coredemo.getIDToken()
+           result-encoding: string
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_SALMON_FLOWER_0D0F8C41E }}
           action: "upload"
-          app_location: "/"  # Root directory of your app source code
-          output_location: "/"  # Directory where build output is located (e.g., 'build' or 'dist' if built)
-          skip_app_build: true  # Set to false if you want Azure to handle the build
-          skip_api_build: true  # Set to false if you have an API to build
-          skip_deploy_on_missing_secrets: false  # Set to true to skip deployment if token is missing
+          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
+          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
+          app_location: "/" # App source code path
+          api_location: "" # Api source code path - optional
+          output_location: "." # Built app content directory - optional
+          github_id_token: ${{ steps.idtoken.outputs.result }}
+          ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -58,5 +55,5 @@ jobs:
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "close"
+Add placeholder build script to package.json · jwstout-wtamu/az_cicd@3349856
